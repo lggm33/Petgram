@@ -1,6 +1,7 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
-// import 'firebase/firestore';
+// v9 compat packages are API compatible with v8 code
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 const app = firebase.initializeApp({
   apiKey: "AIzaSyAou3q_u_YoTHQh3nzJYD9qZmtUnApqcfI",
@@ -11,6 +12,7 @@ const app = firebase.initializeApp({
   appId: "1:120250935902:web:0840ccf6c51d4f67f1a2cf"
 })
 
-export const auth = app.auth()
-// export const db = app.firestore();
+const db = app.firestore(); 
+const auth = app.auth()
+export { auth, db }
 export default app;

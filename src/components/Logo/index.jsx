@@ -2,17 +2,13 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { useAuth } from '../../context/AuthContext'
 import { Link } from '@reach/router';
 import { Svg } from './styles';
 
 const Logo = (props) => {
 
-  const { currentUser } = useAuth() 
-
   return (
     <Link to='/'>
-      {currentUser ? currentUser.email : 'not user register'}
       <Svg
         width={387.923}
         height={120.81}

@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { auth } from '../firebase/FirebaseConfig';
+import { FirestorProvider } from '../context/FirestoreContext'
 
 const AuthContext = React.createContext();
 
@@ -59,8 +60,10 @@ export const AuthProvider =( {children} ) => {
   }
 
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
+    <FirestorProvider>
+      <AuthContext.Provider value={value}>
+        {!loading && children}
+      </AuthContext.Provider>  
+    </FirestorProvider>
   )
 }

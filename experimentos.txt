@@ -1,0 +1,6 @@
+  // const docRef = doc(db, 'favorites', userUid);
+  // getDoc(docRef)
+  // .then(response => console.log(response.exists()))
+  // .catch(error => console.log(error))
+
+      // state.favorites.find(photo => photo === id ) === undefined ? addFavorites(id) : null

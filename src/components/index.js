@@ -13,3 +13,4 @@ export { default as PhotoCard } from './PhotoCard/index';
 export { default as Auth } from './Auth/index';
 export { default as SignIn } from './SignIn/index';
 export { default as Perfil } from './Perfil/index';
+export { default as ListOfFavorites } from './ListOfFavorites/index';

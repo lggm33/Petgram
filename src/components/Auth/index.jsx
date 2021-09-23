@@ -1,10 +1,14 @@
 /* eslint-disable consistent-return */
 import React, { useRef, useState } from 'react';
 import { Link, navigate } from '@reach/router';
+import { getFirestore, doc, setDoc } from '@firebase/firestore';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 
 function Auth() {
+
+  const db = getFirestore()
+
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
@@ -24,7 +28,11 @@ function Auth() {
     try {
       setError('');
       setLoading(true);
-      await signUp(emailRef.current.value, passwordRef.current.value);
+      const userResponse = await signUp(emailRef.current.value, passwordRef.current.value)
+      await setDoc(doc(db, 'favorites', userResponse.user.uid), {
+        listUrls: []
+      })
+  
     } catch {
       setError('Failed to create an account: error');
     }
