@@ -3,7 +3,7 @@ import React from 'react';
 
 const NotRegisterUser = () => {
   return (
-    <h1>Favor registrarse</h1>
+    <h1>No esta registrado</h1>
   );
 };
 
