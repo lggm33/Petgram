@@ -67,7 +67,7 @@ function Perfil({cover = DEFAULT_IMAGE }) {
         <Label>Name</Label>
         <Input {...register("Name")} disabled={!edit} placeholder='Name' id='nameRef' />
         <Label>ID user</Label>
-        <Input {...register("IDuser")} disabled={!edit} placeholder='IDuser' />
+        <Input {...register("IDuser")} disabled={!edit} placeholder='userID' />
         <Label>Email</Label>
         <Input {...register("Email")} disabled={!edit} placeholder='Email' />
         <Label>Age</Label>
