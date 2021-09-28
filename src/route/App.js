@@ -11,26 +11,6 @@ import GlobalStyles from '../styles/GlobalStyles';
 
 function App() { 
 
-  // const db = getFirestore()
-  // const [data, setData] = useState({})
-
-  // useEffect(() => {
-  //   db.collection('photos').doc('4a122TTfFrMNznWUl3cI').onSnapshot(snap => {
-  //     setData(snap.data())
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   const unsub = onSnapshot(doc(db,'photos', '4a122TTfFrMNznWUl3cI'), (doc) => {
-  //     // console.log(doc.data())
-  //     setData(doc.data())
-  //   })
-
-  //   return () => unsub()
-  // }, [])
-
-  // console.log({data})
-
   return (
     <react.Fragment>
       <AuthProvider>

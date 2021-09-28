@@ -24,28 +24,49 @@ export const Image = styled.img`
   width: 100px;
 `;
 
-export const Text = styled.div`
+export const Form = styled.form`
   margin: 20px 0px 0px 5px;
-  height: 200px;
+  height: 250px;
   width: 100%auto;
   display:grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   justify-items: center;
 `
-export const P = styled.p`
+export const Label = styled.label`
   width: 100%;
   max-height: 40px;
   text-align: center;
   border-bottom: solid 1px #d7d7d7;
 `
+export const Input = styled.input`
+  width: 100%;
+  max-height: 40px;
+  text-align: center;
+  border: none;
+  border-bottom: solid 1px #d7d7d7;
+`
 
-export const LogOut = styled.button`
+export const ContainerIcons = styled.button`
+  display: flex;
+  align-content: flex-start;
+`
+
+export const Button = styled.button`
   margin-top: 20px;
   width:70px;
   height: 40px;
   border: solid 1px #000;
   border-radius: 10px;
 
+`
+
+export const LogOut = styled.div`
+  margin-top: 20px;
+`
+
+export const NewUser = styled.p`
+  color: red;
+  margin-top: 20px;
 `
 

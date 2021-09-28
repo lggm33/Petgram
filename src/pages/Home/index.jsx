@@ -4,9 +4,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useData } from '../../context/DataContext';
-// import { db } from '../../firebase/FirebaseConfig';
 import { getFirestore, getDocs, collection} from '@firebase/firestore';
-import { ListOfCategories, ListOfPhotoCards } from '../../components';
+import { ListOfCategories, ListOfPhotoCards, ErrorPage } from '../../components';
 
 export const Home = (props) => {
 
@@ -14,6 +13,7 @@ export const Home = (props) => {
   const {initState, state} = useData()
   const { id } = props;
   const [ fbData, setfbData] = useState({photos: [], categories: []})
+  const [error, setError] = useState(null)
 
   useEffect(() => {
 
@@ -32,13 +32,25 @@ export const Home = (props) => {
             photos:fbData.photos,
           });
         })
+        .catch((e) => {
+          setError(e.name)
+        })
     }
   }, [])
 
   return (
     <>
-      <ListOfCategories />
-      <ListOfPhotoCards id={id} />
+      {error ? (
+        <ErrorPage error={error} />
+      ) : (
+        <>
+          <ListOfCategories />
+          <ListOfPhotoCards id={id} />
+        </>
+        
+      )
+      }
+      
     </>
   );
 };

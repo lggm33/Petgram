@@ -13,11 +13,11 @@ import { ImgWrapper, Img, Button, Container } from './styles';
 
 
 const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60';
-const db = getFirestore()
+
 
 
 const PhotoCard = ({ fbId, id, src = DEFAULT_IMAGE }) => {
-  
+  const db = getFirestore()
   const {currentUser} = useAuth();
   let userUid = ''
   let photoIdFb = {}
@@ -44,8 +44,8 @@ const PhotoCard = ({ fbId, id, src = DEFAULT_IMAGE }) => {
     try {
       let unsub = onSnapshot(doc(db, 'photos', fbId), (snap) => {
         setData(snap.data())
-        return () => unsub()
       })
+      return () => { unsub()}
     } catch {
       null
     }
@@ -58,10 +58,10 @@ const PhotoCard = ({ fbId, id, src = DEFAULT_IMAGE }) => {
       const unsub = onSnapshot(doc(db, 'favorites', userUid), (snap) => {
         const data = snap.data()
         data && (
-          setLiked(data.listUrls.find((element) => element === src ))
+          setLiked(data.listUrls.some((element) => element === src ))
         )
       })
-      return () => unsub()
+      return () => {unsub()}
     } catch {
       null
     }
