@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
   ul { list-style: none; }
   button { background: transparent; border: 0; outline: 0 }
 
+  h1 {
+    font-size: calc(1.375rem + 1.5vw)
+  }
+  
   body {
     background: #fefefe;
     height: 100vh;
@@ -30,5 +34,7 @@ const GlobalStyle = createGlobalStyle`
     padding-bottom: 10px;
   }
 `;
+
+
 
 export default GlobalStyle;
