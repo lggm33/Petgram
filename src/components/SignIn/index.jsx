@@ -7,7 +7,7 @@ import { useAuth } from '../../context/AuthContext';
 function SignIn() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const [error, setError] = useState('');
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { logIn } = useAuth();
@@ -15,16 +15,14 @@ function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    try {
-      setError('');
-      setLoading(true);
-      logIn(emailRef.current.value, passwordRef.current.value);
-    } catch {
-      setError('Failed to create an account: error');
-    }
-
-    setLoading(false);
+    logIn(emailRef.current.value, passwordRef.current.value)
+      .then(() => {setLoading(false);})
+      .catch((e) => {
+        setError(`Failed sing in: ${e.code}`);
+        setLoading(false);
+      })
 
   };
 

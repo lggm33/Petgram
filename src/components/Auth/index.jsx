@@ -32,8 +32,9 @@ function Auth() {
           setLoading(false)
           navigate('/user')
         } )
-        .catch(() => {
-          setError('Failed to create an account: error');
+        .catch((e) => {
+          console.log({...e})
+          setError(`Failed to create an account: ${e.code}`);
           setLoading(false)
         } )
   };
