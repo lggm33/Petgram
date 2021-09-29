@@ -3,13 +3,13 @@
 /* eslint-disable import/prefer-default-export */
 
 import React, { useEffect, useState } from 'react';
+import { db } from '../../firebase/FirebaseConfig'
 import { useData } from '../../context/DataContext';
-import { getFirestore, getDocs, collection} from '@firebase/firestore';
+import {getDocs, collection} from '@firebase/firestore';
 import { ListOfCategories, ListOfPhotoCards, ErrorPage } from '../../components';
 
 export const Home = (props) => {
 
-  const db = getFirestore()
   const {initState, state} = useData()
   const { id } = props;
   const [ fbData, setfbData] = useState({photos: [], categories: []})

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { auth } from '../firebase/FirebaseConfig';
-import { FirestorProvider } from '../context/FirestoreContext'
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut , onAuthStateChanged} from 'firebase/auth';
+import { auth } from '../firebase/FirebaseConfig'
+
 
 const AuthContext = React.createContext();
 
@@ -11,35 +12,23 @@ export const AuthProvider =( {children} ) => {
   const [loading, setLoading] = useState(true);
 
   const signUp = (email, password) => {
-    return auth.createUserWithEmailAndPassword(email, password)
+    return createUserWithEmailAndPassword(auth, email, password)
   }
 
   const signIn = (email, password) => {
-    return auth.signInWithEmailAndPassword(email, password)
+    return signInWithEmailAndPassword(auth, email, password)
   }
 
   const logOut = () => {
-    return auth.signOut()
+    return signOut(auth)
   }
 
   const logIn = (email, password) => {
-    return auth.signInWithEmailAndPassword(email, password)
-  }
-
-  function resetPassword(email) {
-    return auth.sendPasswordResetEmail(email)
-  }
-
-  function updateEmail(email) {
-    return currentUser.updateEmail(email)
-  }
-
-  function updatePassword(password) {
-    return currentUser.updatePassword(password)
+    return signInWithEmailAndPassword(auth, email, password)
   }
 
   useEffect(() => {
-    const unSubscribe = auth.onAuthStateChanged((user) => {
+    const unSubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user)
       setLoading(false)
     })
@@ -54,16 +43,11 @@ export const AuthProvider =( {children} ) => {
     logOut,
     logIn,
     loading,
-    resetPassword,
-    updateEmail,
-    updatePassword,
   }
 
   return (
-    <FirestorProvider>
       <AuthContext.Provider value={value}>
         {!loading && children}
       </AuthContext.Provider>  
-    </FirestorProvider>
   )
 }

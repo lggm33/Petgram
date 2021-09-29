@@ -1,13 +1,12 @@
 /* eslint-disable consistent-return */
 import React, { useRef, useState } from 'react';
 import { Link, navigate } from '@reach/router';
-import { getFirestore, doc, setDoc } from '@firebase/firestore';
+import { db } from '../../firebase/FirebaseConfig'
+import { doc, setDoc } from '@firebase/firestore';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 
 function Auth() {
-
-  const db = getFirestore()
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -20,26 +19,23 @@ function Auth() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError('Password do not match');
     }
 
-    try {
       setError('');
-      setLoading(true);
-      const userResponse = await signUp(emailRef.current.value, passwordRef.current.value)
-      await setDoc(doc(db, 'favorites', userResponse.user.uid), {
-        listUrls: []
-      })
-  
-    } catch {
-      setError('Failed to create an account: error');
-    }
-
-    setLoading(false);
-    navigate('/user')
-
+      signUp(emailRef.current.value, passwordRef.current.value)
+        .then((userResponse) => setDoc(doc(db, 'favorites', userResponse.user.uid), {listUrls: []}))
+        .then(() => {
+          setLoading(false)
+          navigate('/user')
+        } )
+        .catch(() => {
+          setError('Failed to create an account: error');
+          setLoading(false)
+        } )
   };
 
   return (
