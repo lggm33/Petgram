@@ -5,12 +5,12 @@ import { Link, Nav } from './styles';
 
 const SIZE = '32px';
 
-const NavBar = () => {
+const NavBar = ({currentUser}) => {
   return (
     <Nav>
       <Link to='/'><MdHome size={SIZE} /></Link>
-      <Link to='/favs'><MdFavoriteBorder size={SIZE} /></Link>
-      <Link to='/user'><MdPersonOutline size={SIZE} /></Link>
+      <Link to={currentUser ? '/favs' : '/welcome' }><MdFavoriteBorder size={SIZE} /></Link>
+      <Link to={currentUser ? '/user' : '/signIn'}><MdPersonOutline size={SIZE} /></Link>
     </Nav>
   );
 };

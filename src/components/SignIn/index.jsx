@@ -1,24 +1,24 @@
 /* eslint-disable consistent-return */
-import React, { useRef, useState } from 'react';
-import { Link } from '@reach/router';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, navigate } from '@reach/router';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import { useAuth } from '../../context/AuthContext';
+import useAuth from '../../hooks/useAuth';
 
 function SignIn() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
+
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const {register, handleSubmit} = useForm();
 
-  const { logIn } = useAuth();
+  const { signIn } = useAuth();
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
     setLoading(true);
 
-    logIn(emailRef.current.value, passwordRef.current.value)
-      .then(() => {setLoading(false);})
+    signIn(data.email, data.password)
+      .then(() => {setLoading(false); navigate('/user')})
       .catch((e) => {
         setError(`Failed sing in: ${e.code}`);
         setLoading(false);
@@ -32,14 +32,14 @@ function SignIn() {
         <Card.Body>
           <h2 className='text-center mb-4'>Sign In</h2>
           {error && <Alert variant='danger'>{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group id='email'>
               <Form.Label>Email</Form.Label>
-              <Form.Control type='email' ref={emailRef} required />
+              <Form.Control {...register('email')} type='email' required />
             </Form.Group>
             <Form.Group id='password'>
               <Form.Label>Password</Form.Label>
-              <Form.Control className='mb-4' type='password' ref={passwordRef} required />
+              <Form.Control {...register('password')} className='mb-4' type='password' required />
             </Form.Group>
             <Button disable={loading ? 'true' : 'false'} className='w-100' type='submit'> Sign In</Button>
           </Form>
@@ -47,7 +47,7 @@ function SignIn() {
       </Card>
       <div className='w-100 text-center mt-2'>
         Do you need an account?
-        <Link to='/user/new'> Sign Up</Link>
+        <Link to='/signUp'> Sign Up</Link>
       </div>
     </>
   );

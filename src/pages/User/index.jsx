@@ -1,9 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
+
 import { Perfil } from '../../components'
-function index() {
+
+function index({currentUser}) {
+
   return (
-      <Perfil />
+      <Perfil currentUser={currentUser} />
   )
 }
 

@@ -1,56 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
 /* eslint-disable import/prefer-default-export */
-
-import React, { useEffect, useState } from 'react';
-import { db } from '../../firebase/FirebaseConfig'
-import { useData } from '../../context/DataContext';
-import {getDocs, collection} from '@firebase/firestore';
-import { ListOfCategories, ListOfPhotoCards, ErrorPage } from '../../components';
+import React from 'react';
+import { ListOfCategories, ListOfPhotoCards, ErrorPage, Loading } from '../../components';
 
 export const Home = (props) => {
 
-  const {initState, state} = useData()
-  const { id } = props;
-  const [ fbData, setfbData] = useState({photos: [], categories: []})
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-
-    if (state.photos.length === 0) {
-      
-      const p1 = getDocs(collection(db,'photos'))
-      .then(response => response.forEach(doc => {setfbData(fbData.photos.push({...doc.data(), fbId: doc.id}))}))
-  
-      const p2 = getDocs(collection(db,'categories'))
-        .then(response => response.forEach(doc => {setfbData(fbData.categories.push(doc.data()))}))
-
-      Promise.all([p1, p2])
-        .then(() => {
-          initState({
-            categories: fbData.categories,
-            photos:fbData.photos,
-          });
-        })
-        .catch((e) => {
-          setError(e.name)
-        })
-    }
-  }, [])
+  const { id, error, loading, initState: {photos, categories}, uid } = props;
 
   return (
     <>
-      {error ? (
-        <ErrorPage error={error} />
-      ) : (
+      {error && <ErrorPage error={error} />}
+      {loading && <Loading/>}
+      {(!error && !loading) && (
         <>
-          <ListOfCategories />
-          <ListOfPhotoCards id={id} />
+          <ListOfCategories categories={categories}/>
+          <ListOfPhotoCards id={id} photos={photos} uid={uid}/>
         </>
-        
-      )
-      }
-      
+      )}      
     </>
   );
 };

@@ -6,7 +6,7 @@
 export { default as Detail } from './Detail/index';
 export { default as Favorites } from './Favorites/index';
 export { default as Home } from './Home/index';
-export { default as NotRegisterUser } from './NotRegisterUser/index';
+export { default as Welcome } from './Welcome/index';
 export { default as SignUp } from './SignUp/index';
 export { default as SignIn } from './SignIn/index';
 export { default as User } from './User/index';

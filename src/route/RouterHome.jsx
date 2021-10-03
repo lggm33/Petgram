@@ -2,6 +2,7 @@ import React from 'react';
 import { Router } from '@reach/router';
 import { Home, Detail} from '../pages';
 
+
 function RouterHome() {
   return (
     <>

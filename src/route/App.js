@@ -1,29 +1,40 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import react from 'react';
-import RouterHome from './RouterHome';
-import RouterUser from './RouterUser';
-// import {db} from '../firebase/FirebaseConfig'
-// import { getFirestore, collection, onSnapshot, doc } from 'firebase/firestore';
+import { Router } from '@reach/router';
 import {NavBar, Logo} from '../components'
 import { AuthProvider } from '../context/AuthContext';
-import { DataProvider } from '../context/DataContext';
 import GlobalStyles from '../styles/GlobalStyles';
+import { Home, Detail, Favorites, SignUp, SignIn, User, Welcome} from '../pages';
+import { ErrorPage } from '../components'
+import useGetData from '../hooks/useGetData';
+import useAuth from '../hooks/useAuth';
 
 function App() { 
+
+  const initState = useGetData()
+  const { currentUser } = useAuth()
 
   return (
     <react.Fragment>
       <AuthProvider>
-        <DataProvider>
           <GlobalStyles />
             <Logo />
-            <RouterHome />
-            <RouterUser />
-        </DataProvider>
+            <Router>
+              <Home path='/' {...initState} {...currentUser}/>
+              <Home path='/pet/:id' {...initState} />
+              <Detail path='/detail/:detailId' {...initState} />
+              <Favorites currentUser={currentUser} path='/favs' />
+              <User path='/user' currentUser={currentUser} />
+              <Welcome path='/welcome' />
+              <SignIn path='/signIn'  />
+              <SignUp path='/signUp' />
+              <ErrorPage default/>
+            </Router>
+          <NavBar currentUser={currentUser}  />
       </AuthProvider>
-      <NavBar />
     </react.Fragment>
   );
 }
 
 export default App;
+ 

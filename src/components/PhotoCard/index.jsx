@@ -3,101 +3,61 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable operator-linebreak */
 /* eslint-disable import/prefer-default-export */
-import React, {useEffect, useState} from 'react';
-import {getFirestore, doc, updateDoc, increment, arrayUnion, arrayRemove, onSnapshot} from 'firebase/firestore';
-import { useAuth} from '../../context/AuthContext';
+import React, {useState} from 'react';
+import {increment, arrayUnion, arrayRemove, } from 'firebase/firestore';
 import { Link } from '@reach/router';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 import useNearScreen from '../../hooks/useNearScreen';
 import { ImgWrapper, Img, Button, Container } from './styles';
+import useSnapshot from '../../hooks/useSnapshot';
+import useFirestore from '../../hooks/useFirestore';
 
-
-const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60';
-
-
-
-const PhotoCard = ({ fbId, id, src = DEFAULT_IMAGE }) => {
-  const db = getFirestore()
-  const {currentUser} = useAuth();
-  let userUid = ''
-  let photoIdFb = {}
-  let favoriteRef = {}
-
-  if (currentUser) {
-    userUid = currentUser.uid
-    photoIdFb = doc(db, 'photos', fbId )
-    favoriteRef = doc(db, 'favorites', userUid)
-  }
-  
-  const [data, setData] = useState({})
+const PhotoCard = ({ fbId, id, src, currentUser, uid }) => {
 
   const [show, element] = useNearScreen();
-
   const [liked, setLiked] = useState(false);
+  const {updateDocument} = useFirestore();
 
-  const Icon = liked ? MdFavorite : MdFavoriteBorder;
+  const [snapPhotos, loadingPhotos] = useSnapshot('photos', fbId)
 
-
-
-// fetch number of likes photos
-  useEffect(() => {
-    try {
-      let unsub = onSnapshot(doc(db, 'photos', fbId), (snap) => {
-        setData(snap.data())
-      })
-      return () => { unsub()}
-    } catch {
-      null
-    }
-    // return () => {unsub()}
-  }, [])
-
-// fetch if like photo
-  useEffect(() => {
-    try {
-      const unsub = onSnapshot(doc(db, 'favorites', userUid), (snap) => {
-        const data = snap.data()
-        data && (
-          setLiked(data.listUrls.some((element) => element === src ))
-        )
-      })
-      return () => {unsub()}
-    } catch {
-      null
-    }
-    
-    
-  }, []) 
-  
+  const Icon =  snapPhotos.favoritesUser?.some((userID) => userID === uid) ? MdFavorite : MdFavoriteBorder
 
   const handleOnClick = async () => {
     setLiked(!liked);
     if (liked) {
-      await updateDoc(photoIdFb, {likes: increment(-1)})
-      await updateDoc(favoriteRef, {listUrls: arrayRemove(src)})
+      await updateDocument('photos', fbId, {
+        favoritesUser: arrayRemove(uid),
+        likes: increment(-1)
+      })
 
     } else {
-      await updateDoc(photoIdFb, {likes: increment(1)});
-      await updateDoc(favoriteRef, {listUrls: arrayUnion(src)})
+      await updateDocument('photos', fbId, {
+        favoritesUser: arrayUnion(uid),
+        likes: increment(1)
+      })
     }
+    
+
   };
+
 
   return (
     <Container ref={element}>
       {
         show && (
           <>
-            <Link to={`/detail/${id}`}>
+            <Link to={`/detail/${fbId}`}>
               <ImgWrapper>
                 <Img src={src} />
               </ImgWrapper>
             </Link>
 
-            {currentUser && (
+            {uid && (
               <Button>
-                <Icon size='32px' onClick={() => handleOnClick()} />
+                {!loadingPhotos && <Icon size='32px' onClick={() => handleOnClick()} /> }
+                
                 {' '}
-                {data.likes}
+                {snapPhotos.likes}
                 {' '}
                 likes!
               </Button>
